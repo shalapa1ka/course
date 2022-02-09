@@ -6,10 +6,7 @@ def right_triangle?(arr)
 end
 
 print 'Enter 3 side of the triangle (sep - space): '
-a, b, c = gets.chomp.split
-a = a.to_f
-b = b.to_f
-c = c.to_f
+a, b, c = gets.chomp.split.map(&:to_f)
 sides_length = [a, b, c]
 sides_length.sort!.reverse!
 
