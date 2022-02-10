@@ -1,5 +1,4 @@
 class Route
-  attr_reader :start, :finish, :stations
 
   def initialize(start = '', finish = '')
     @start = start
@@ -18,4 +17,8 @@ class Route
   def show_route
     stations.each { |station| print "#{station} " }
   end
+
+  protected
+
+  attr_reader :start, :finish, :stations
 end

@@ -1,8 +1,9 @@
 class Train
 
-  def initialize(number = '', type = PassengerTrain.type, carriages = [])
+  attr_accessor :speed, :carriages, :current_station_index
+
+  def initialize(number = '', carriages = [])
     @number = number
-    @type = type
     @carriages = carriages
     @speed = 0
     @route = nil
@@ -44,6 +45,5 @@ class Train
 
   protected
 
-  attr_reader :number, :type, :route
-  attr_accessor :speed, :carriages, :current_station_index
+  attr_reader :number, :route
 end
