@@ -1,6 +1,6 @@
 class Train
 
-  def initialize(number, type, carriages)
+  def initialize(number = '', type = PassengerTrain.type, carriages = [])
     @number = number
     @type = type
     @carriages = carriages
@@ -22,11 +22,11 @@ class Train
     self.speed = 0
   end
 
-  def add_wagon
+  def add_car
     self.carriages += 1 if speed.zero?
   end
 
-  def remove_wagon
+  def remove_car
     self.carriages -= 1 if speed.zero?
   end
 
@@ -41,4 +41,9 @@ class Train
   def previous_station
     self.route.stations[current_station_index - 1] if current_station_index >= 1
   end
+
+  protected
+
+  attr_reader :number, :type, :route
+  attr_accessor :speed, :carriages, :current_station_index
 end
