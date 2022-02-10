@@ -23,8 +23,8 @@ class Train
     self.speed = 0
   end
 
-  def add_car
-    self.carriages += 1 if speed.zero?
+  def add_car(carriage)
+    carriages << carriage if speed.zero? && carriage.type == self.type
   end
 
   def remove_car
@@ -32,17 +32,20 @@ class Train
   end
 
   def current_station
-    self.route.stations[current_station_index]
+    route.stations[current_station_index]
   end
 
   def next_station
-    self.route.stations[current_station_index + 1] if current_station_index < route.stations.size - 1
+    route.stations[current_station_index + 1] if current_station_index < route.stations.size - 1
   end
 
   def previous_station
-    self.route.stations[current_station_index - 1] if current_station_index >= 1
+    route.stations[current_station_index - 1] if current_station_index >= 1
   end
 
+  def type
+    nil
+  end
   protected
 
   attr_reader :number, :route
