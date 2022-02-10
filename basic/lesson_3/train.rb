@@ -1,18 +1,14 @@
 class Train
 
-  attr_accessor :speed, :carriages, :current_station_index
+  attr_accessor :speed, :carriages, :current_station_index, :route
+  attr_reader :number
 
   def initialize(number = '', carriages = [])
     @number = number
     @carriages = carriages
     @speed = 0
     @route = nil
-    @current_station_index = nil
-  end
-
-  def get_route(route)
-    self.route = route
-    self.current_station_index = 0
+    @current_station_index = 0
   end
 
   def speed_up(speed)
@@ -27,8 +23,8 @@ class Train
     carriages << carriage if speed.zero? && carriage.type == self.type
   end
 
-  def remove_car
-    self.carriages -= 1 if speed.zero?
+  def remove_car(carriage)
+    carriages.delete(carriage) if speed.zero?
   end
 
   def current_station
@@ -40,13 +36,10 @@ class Train
   end
 
   def previous_station
-    route.stations[current_station_index - 1] if current_station_index >= 1
+    route[current_station_index - 1] if current_station_index >= 1
   end
 
   def type
     nil
   end
-  protected
-
-  attr_reader :number, :route
 end

@@ -1,5 +1,6 @@
 class Station
   attr_accessor :trains
+  attr_reader :title
 
   def initialize(title = '')
     @title = title
@@ -13,8 +14,4 @@ class Station
   def train_departure(train)
     trains.delete(train)
   end
-
-  protected
-
-  attr_reader :titles
 end
