@@ -1,6 +1,4 @@
 class Train
-  attr_reader :number, :type, :route
-  attr_accessor :speed, :carriages, :current_station_index
 
   def initialize(number, type, carriages)
     @number = number
@@ -11,7 +9,7 @@ class Train
     @current_station_index = nil
   end
 
-  def get_route(route: Route)
+  def get_route(route)
     self.route = route
     self.current_station_index = 0
   end
@@ -33,14 +31,14 @@ class Train
   end
 
   def current_station
-    route.stations[current_station_index]
+    self.route.stations[current_station_index]
   end
 
   def next_station
-    route.stations[current_station_index + 1] if current_station_index < route.stations.size - 1
+    self.route.stations[current_station_index + 1] if current_station_index < route.stations.size - 1
   end
 
   def previous_station
-    route.stations[current_station_index - 1] if current_station_index >= 1
+    self.route.stations[current_station_index - 1] if current_station_index >= 1
   end
 end
