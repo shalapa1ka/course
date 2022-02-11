@@ -23,7 +23,7 @@ class Train
     carriages << carriage if speed.zero? && carriage.type == self.type
   end
 
-  def remove_car()
+  def remove_car
     carriages.pop if speed.zero?
   end
 
