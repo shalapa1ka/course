@@ -1,7 +1,10 @@
 class Train
 
+  include Company
   attr_accessor :speed, :carriages, :current_station_index, :route
   attr_reader :number
+
+  @@instances = {}
 
   def initialize(number = '', carriages = [])
     @number = number
@@ -9,6 +12,7 @@ class Train
     @speed = 0
     @route = nil
     @current_station_index = 0
+    @@instances[number] = self
   end
 
   def speed_up(speed)
@@ -41,5 +45,9 @@ class Train
 
   def type
     nil
+  end
+
+  def self.all
+    @@instances[number]
   end
 end

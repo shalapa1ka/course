@@ -1,9 +1,12 @@
 class Station
   attr_reader :title,  :trains
 
+  @@instances = []
+
   def initialize(title = '')
     @title = title
     @trains = []
+    @@instances << self
   end
 
   def add_train(train)
@@ -12,5 +15,9 @@ class Station
 
   def train_departure(train)
     trains.delete(train)
+  end
+
+  def self.all
+    @@instances
   end
 end
