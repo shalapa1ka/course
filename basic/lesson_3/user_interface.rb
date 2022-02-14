@@ -44,27 +44,38 @@ class UserInterface
   private
 
   def create_station
-    print 'Enter station title: '
-    title = gets.chomp
-    puts "Station #{title} created successful" if stations << Station.new(title)
+    begin
+      print 'Enter station title: '
+      title = gets.chomp
+      stations << Station.new(title)
+    rescue StandardError
+      puts 'Invalid input. Pleases try again'
+      retry
+    end
+
+    puts "Station #{title} created successful"
   end
 
   def create_train
-    print 'Which type of train (pass or cargo): '
-    type = gets.chomp
-    print 'Enter train number: '
-    number = gets.chomp
+    begin
+      print 'Which type of train (pass or cargo): '
+      type = gets.chomp
+      print 'Enter train number: '
+      number = gets.chomp
 
-    case type
-    when 'pass'
-      trains << PassengerTrain.new(number)
-    when 'cargo'
-      trains << CargoTrain.new(number)
-    else
-      puts 'This type of train does not exist.'
-      nil
+      case type
+      when 'pass'
+        trains << PassengerTrain.new(number)
+      when 'cargo'
+        trains << CargoTrain.new(number)
+      else
+        puts 'This type of train does not exist.'
+        nil
+      end
+    rescue StandardError
+      puts 'Invalid input. Please try again'
+      retry
     end
-
     puts "Train #{number} created successful"
   end
 
