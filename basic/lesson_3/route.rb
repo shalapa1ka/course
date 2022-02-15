@@ -1,5 +1,4 @@
 class Route
-
   attr_reader :start, :finish, :stations
 
   def initialize(start = nil, finish = nil)
@@ -19,5 +18,4 @@ class Route
   def show_route
     print stations.map(&:title)
   end
-
 end

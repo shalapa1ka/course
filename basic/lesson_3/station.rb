@@ -42,6 +42,7 @@ class Station
 
   def valid!
     raise 'Invalid title' if @title !~ TITLE_FORMAT
+
     true
   end
 end

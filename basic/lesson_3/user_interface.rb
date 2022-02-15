@@ -14,15 +14,9 @@ class UserInterface
   def initialize
     @is_run = true
     @action = {
-      '1': 'create_station',
-      '2': 'create_train',
-      '3': 'add_carriage',
-      '4': 'remove_carriage',
-      '5': 'add_train_to_station',
-      '6': 'show_stations_and_trains',
-      '7': 'fill_volume',
-      '8': 'buy_place',
-      '9': 'end'
+      '1': 'create_station', '2': 'create_train', '3': 'add_carriage', '4': 'remove_carriage',
+      '5': 'add_train_to_station', '6': 'show_stations_and_trains', '7': 'fill_volume',
+      '8': 'buy_place', '9': 'end'
     }
   end
 
@@ -65,12 +59,8 @@ class UserInterface
       print 'Enter train number: '
       number = gets.chomp
 
-      case type
-      when 'pass'
-        PassengerTrain.new(number)
-      when 'cargo'
-        CargoTrain.new(number)
-      end
+      action = { pass: PassengerCarriage.new(number), cargo: CargoCarriage.new(number) }
+      action[type]
     rescue StandardError
       puts 'Invalid input. Please try again'
       retry
@@ -90,6 +80,8 @@ class UserInterface
       print 'Enter volume size: '
       volume = gets.chomp.to_i
       Train.find(number).add_car(CargoCarriage.new(volume))
+    else
+      puts 'Invalid carriage type'
     end
   end
 
