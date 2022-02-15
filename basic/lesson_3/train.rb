@@ -53,11 +53,15 @@ class Train
     route[current_station_index - 1] if current_station_index >= 1
   end
 
+  def all_carriages(block)
+    block.call(carriages)
+  end
+
   def type
     nil
   end
 
-  def self.all
+  def self.find(number)
     @@instances[number]
   end
 

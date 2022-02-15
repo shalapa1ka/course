@@ -1,13 +1,14 @@
 class Station
-  attr_reader :title, :trains
+  attr_accessor :title
+  attr_reader :trains
 
-  @@instances = []
+  @@instances = {}
   TITLE_FORMAT = /[a-z]{3,}/.freeze
 
   def initialize(title = '')
     @title = title
     @trains = []
-    @@instances << self
+    @@instances[title] = self
     valid!
   end
 
@@ -20,7 +21,15 @@ class Station
   end
 
   def self.all
-    @@instances
+    @@instances.values
+  end
+
+  def self.find(title)
+    @@instances[title]
+  end
+
+  def all_trains(block)
+    block.call(trains)
   end
 
   def valid?
