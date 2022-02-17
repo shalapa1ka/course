@@ -40,22 +40,22 @@ module Validation
 
     def valid?
       validate!
-    # rescue StandardError
-    #   false
+    rescue StandardError
+      false
     end
 
     protected
 
-    def presence_validation(err, attr, option = nil)
-      raise err if [nil, ''].include? attr
+    def presence_validation(err, attr, _)
+      raise StandardError, err if [nil, ''].include? attr
     end
 
     def format_validation(err, attr, option)
-      raise err if send(attr) !~ option
+      raise StandardError, err if send(attr) !~ option
     end
 
     def type_validation(err, attr, option)
-      raise err unless send(attr).is_a? option
+      raise StandardError, err unless send(attr).is_a? option
     end
   end
 end

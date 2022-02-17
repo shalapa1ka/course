@@ -1,12 +1,18 @@
 require_relative 'company'
+require_relative 'validation'
 
 class Train
+  include Validation
   include Company
-  attr_accessor :speed, :carriages, :current_station_index, :route
-  attr_reader :number
 
   @@instances = {}
   NUMBER_FORMAT = /^[\da-z]{3}-*[\da-z]{2}$/i.freeze
+
+  attr_accessor :speed, :carriages, :current_station_index, :route
+  attr_reader :number
+
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
 
   def initialize(number = '')
     @number = number
@@ -14,14 +20,8 @@ class Train
     @speed = 0
     @route = nil
     @current_station_index = 0
+    validate!
     @@instances[number] = self
-    valid!
-  end
-
-  def valid?
-    valid!
-  rescue StandardError
-    false
   end
 
   def speed_up(speed)
@@ -62,13 +62,5 @@ class Train
 
   def self.find(number)
     @@instances[number]
-  end
-
-  protected
-
-  def valid!
-    raise 'Invalid number' if number !~ NUMBER_FORMAT
-
-    true
   end
 end
