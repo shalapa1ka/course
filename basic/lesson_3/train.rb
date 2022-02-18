@@ -1,7 +1,6 @@
 require_relative 'company'
 
 class Train
-
   include Company
   attr_accessor :speed, :carriages, :current_station_index, :route
   attr_reader :number
@@ -34,7 +33,7 @@ class Train
   end
 
   def add_car(carriage)
-    carriages << carriage if speed.zero? && carriage.type == self.type
+    carriages << carriage if speed.zero? && carriage.type == type
   end
 
   def remove_car
