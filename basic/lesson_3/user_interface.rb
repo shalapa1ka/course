@@ -13,8 +13,6 @@ class UserInterface
 
   def initialize
     @is_run = true
-    @trains = []
-    @stations = []
     @action = {
       '1': 'create_station',
       '2': 'create_train',
@@ -22,7 +20,9 @@ class UserInterface
       '4': 'remove_carriage',
       '5': 'add_train_to_station',
       '6': 'show_stations_and_trains',
-      '7': 'end'
+      '7': 'fill_volume',
+      '8': 'buy_place',
+      '9': 'end'
     }
   end
 
@@ -34,7 +34,9 @@ class UserInterface
       puts '4. Remove the carriage'
       puts '5. Add a train to the station'
       puts '6. Show all'
-      puts '7. Stop'
+      puts '7. Fill volume'
+      puts '8. Buy ticket'
+      puts '9. Stop'
 
       print 'Select one: '
       send action[gets.chomp.to_sym]
@@ -47,12 +49,12 @@ class UserInterface
     begin
       print 'Enter station title: '
       title = gets.chomp
-      stations << Station.new(title)
     rescue StandardError
       puts 'Invalid input. Pleases try again'
       retry
     end
 
+    Station.new(title)
     puts "Station #{title} created successful"
   end
 
@@ -65,12 +67,9 @@ class UserInterface
 
       case type
       when 'pass'
-        trains << PassengerTrain.new(number)
+        PassengerTrain.new(number)
       when 'cargo'
-        trains << CargoTrain.new(number)
-      else
-        puts 'This type of train does not exist.'
-        nil
+        CargoTrain.new(number)
       end
     rescue StandardError
       puts 'Invalid input. Please try again'
@@ -82,25 +81,22 @@ class UserInterface
   def add_carriage
     print 'Enter train number: '
     number = gets.chomp
-    index = trains.map(&:number).index(number)
-    case trains[index].type
+    case Train.find(number).type
     when :pass
-      trains[index].add_car(PassengerCarriage.new)
+      print 'Enter places count: '
+      places = gets.chomp.to_i
+      Train.find(number).add_car(PassengerCarriage.new(places))
     when :cargo
-      trains[index].add_car(CargoCarriage.new)
+      print 'Enter volume size: '
+      volume = gets.chomp.to_i
+      Train.find(number).add_car(CargoCarriage.new(volume))
     end
   end
 
   def remove_carriage
     print 'Enter train number: '
     number = gets.chomp
-    index = trains.map(&:number).index(number)
-    case trains[index].type
-    when :pass
-      trains[index].remove_car
-    when :cargo
-      trains[index].remove_car
-    end
+    Train.find(number).remove_car
   end
 
   def add_train_to_station
@@ -108,16 +104,41 @@ class UserInterface
     station_title = gets.chomp
     print 'Train number: '
     train_number = gets.chomp
-    stations[stations.map(&:title).index(station_title)].trains << trains[trains.map(&:number).index(train_number)]
+    Station.find(station_title).add_train(Train.find(train_number))
   end
 
   def show_stations_and_trains
-    stations.each do |station|
-      print "#{station.title} - "
-      print station.trains.map(&:number)
-      puts
+    block = proc do |train|
+      train.each { |x| puts "\t#{x.number}: #{x.type}" }
     end
-    puts
+
+    Station.all.each do |station|
+      puts "#{station.title}: "
+      station.all_trains block
+    end
+  end
+
+  def fill_volume
+    print 'Enter train number: '
+    number = gets.chomp
+    return false if Train.find(number).type != 'cargo'
+
+    print 'Enter volume: '
+    v = gets.chomp.to_i
+    Train.find(number).carriages.each do |carriage|
+      break if carriage.fill?
+
+      carriage.fill_volume(v)
+    end
+  end
+
+  def buy_place
+    print 'Enter train number: '
+    number = gets.chomp
+    false if Train.find(number).type != 'pass'
+    print 'Enter carriage number: '
+    carriage_number = gets.chomp.to_i
+    Train.find(number).carriages[carriage_number - 1].buy_place
   end
 
   def end
