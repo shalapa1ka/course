@@ -1,3 +1,5 @@
+require_relative 'company'
+
 class Train
 
   include Company
@@ -5,14 +7,22 @@ class Train
   attr_reader :number
 
   @@instances = {}
+  NUMBER_FORMAT = /^[\da-z]{3}-*[\da-z]{2}$/i.freeze
 
-  def initialize(number = '', carriages = [])
+  def initialize(number = '')
     @number = number
-    @carriages = carriages
+    @carriages = []
     @speed = 0
     @route = nil
     @current_station_index = 0
     @@instances[number] = self
+    valid!
+  end
+
+  def valid?
+    valid!
+  rescue StandardError
+    false
   end
 
   def speed_up(speed)
@@ -49,5 +59,13 @@ class Train
 
   def self.all
     @@instances[number]
+  end
+
+  protected
+
+  def valid!
+    raise 'Invalid number' if number !~ NUMBER_FORMAT
+
+    true
   end
 end
