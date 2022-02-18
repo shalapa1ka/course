@@ -40,13 +40,8 @@ class UserInterface
   private
 
   def create_station
-    begin
-      print 'Enter station title: '
-      title = gets.chomp
-    rescue StandardError
-      puts 'Invalid input. Pleases try again'
-      retry
-    end
+    print 'Enter station title: '
+    title = gets.chomp
 
     Station.new(title)
     puts "Station #{title} created successful"
@@ -55,12 +50,16 @@ class UserInterface
   def create_train
     begin
       print 'Which type of train (pass or cargo): '
-      type = gets.chomp
+      type = gets.chomp.to_sym
       print 'Enter train number: '
       number = gets.chomp
 
-      action = { pass: PassengerCarriage.new(number), cargo: CargoCarriage.new(number) }
-      action[type]
+      case type
+      when :pass
+        PassengerTrain.new(number)
+      when :cargo
+        CargoTrain.new(number)
+      end
     rescue StandardError
       puts 'Invalid input. Please try again'
       retry

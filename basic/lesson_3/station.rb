@@ -1,15 +1,22 @@
+require_relative 'validation'
+
 class Station
-  attr_accessor :title
-  attr_reader :trains
+  include Validation
 
   @@instances = {}
   TITLE_FORMAT = /[a-z]{3,}/.freeze
 
+  attr_accessor :title
+  attr_reader :trains
+
+  validate :title, :presence
+  validate :title, :format, TITLE_FORMAT
+
   def initialize(title = '')
     @title = title
     @trains = []
+    validate!
     @@instances[title] = self
-    valid!
   end
 
   def add_train(train)
@@ -30,19 +37,5 @@ class Station
 
   def all_trains(block)
     block.call(trains)
-  end
-
-  def valid?
-    valid!
-  rescue StandardError
-    false
-  end
-
-  protected
-
-  def valid!
-    raise 'Invalid title' if @title !~ TITLE_FORMAT
-
-    true
   end
 end
