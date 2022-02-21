@@ -13,11 +13,8 @@ class UserInterface
 
   def initialize
     @is_run = true
-    @action = {
-      '1': 'create_station', '2': 'create_train', '3': 'add_carriage', '4': 'remove_carriage',
-      '5': 'add_train_to_station', '6': 'show_stations_and_trains', '7': 'fill_volume',
-      '8': 'buy_place', '9': 'end'
-    }
+    @action = %w[create_station create_train add_carriage remove_carriage add_train_to_station show_stations_and_trains
+                 fill_volume buy_place end]
   end
 
   def main
@@ -33,17 +30,21 @@ class UserInterface
       puts '9. Stop'
 
       print 'Select one: '
-      send action[gets.chomp.to_sym]
+      send action[gets.chomp.to_i - 1]
     end
   end
 
   private
 
   def create_station
-    print 'Enter station title: '
-    title = gets.chomp
+    begin
+      print 'Enter station title: '
+      title = gets.chomp
 
-    Station.new(title)
+      Station.new(title)
+    rescue StandardError => e
+      puts e.message
+    end
     puts "Station #{title} created successful"
   end
 
@@ -60,8 +61,8 @@ class UserInterface
       when :cargo
         CargoTrain.new(number)
       end
-    rescue StandardError
-      puts 'Invalid input. Please try again'
+    rescue StandardError => e
+      puts e.message
       retry
     end
     puts "Train #{number} created successful"
