@@ -16,7 +16,7 @@ class CargoCarriage < Carriage
   end
 
   def fill?
-    free_volume.zero? ? true : false
+    free_volume.zero?
   end
 
   def free_volume
